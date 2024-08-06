@@ -24,11 +24,11 @@ export default function CreateProjectView() {
   const { mutate } = useMutation({
     mutationFn: createProject,
     onError: (error) => {
-      console.error(error);
+      console.log(error.message);
       toast.error("Ocurrió un error al crear el proyecto");
     },
-    onSuccess: () => {
-      toast.success("Proyecto creado correctamente");
+    onSuccess: (data) => {
+      toast.success(`proyecto ${data.projectName} creado correctamente`);
       navigate("/");
     },
   });
