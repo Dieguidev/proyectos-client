@@ -45,3 +45,22 @@ export async function getProjectById(id: Project["id"]) {
     }
   }
 }
+
+
+type UpdateProjectData = {
+  formData: ProjectFormData;
+  projectId: Project["id"];
+}
+
+export async function updateProject({ formData, projectId }: UpdateProjectData) {
+  try {
+    const { data } = await api.put(`/project/${projectId}`, formData);
+    return data.project;
+
+  } catch (error) {
+    if (isAxiosError(error) && error.response) {
+      console.error(error.response.data.error);
+      throw new Error(error.response.data.error);
+    }
+  }
+}
