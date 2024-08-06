@@ -15,5 +15,18 @@ export async function createProject(formData: ProjectFormData) {
       throw new Error(error.response.data.error);
     }
   }
+}
+
+export async function getProjects() {
+  try {
+    const {data} = await api.get("/project");
+    return data
+
+  } catch (error) {
+    if (isAxiosError(error) && error.response) {
+      console.error(error.response.data.error);
+      throw new Error(error.response.data.error);
+    }
+  }
 
 }
