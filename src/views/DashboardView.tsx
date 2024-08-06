@@ -9,13 +9,28 @@ import {
 import { EllipsisVerticalIcon } from "@heroicons/react/20/solid";
 
 import { Link } from "react-router-dom";
-import { getProjects } from "../api/ProjectAPI";
-import { useQuery } from "@tanstack/react-query";
+import { deleteProject, getProjects } from "../api/ProjectAPI";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "react-toastify";
 
 export default function DashboardView() {
   const { data, isLoading } = useQuery({
     queryKey: ["projects"],
     queryFn: getProjects,
+  });
+
+  const queryClient = useQueryClient();
+
+  const { mutate } = useMutation({
+    mutationFn: deleteProject,
+    onError: (error) => {
+      toast.error(error.message);
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["projects"] });
+      toast.success(data);
+    },
+
   });
 
   if (isLoading) {
@@ -105,7 +120,7 @@ export default function DashboardView() {
                             <button
                               type="button"
                               className="block px-3 py-1 text-sm leading-6 text-red-500"
-                              onClick={() => {}}
+                              onClick={() => mutate(project.id)}
                             >
                               Eliminar Proyecto
                             </button>

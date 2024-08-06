@@ -29,7 +29,7 @@ export default function EditProjectForm({
     formState: { errors },
   } = useForm({ defaultValues: initialValues });
 
-  const queryClinet = useQueryClient();
+  const queryClient = useQueryClient();
 
   const { mutate } = useMutation({
     mutationFn: updateProject,
@@ -37,8 +37,8 @@ export default function EditProjectForm({
       toast.error(error.message);
     },
     onSuccess: (data) => {
-      queryClinet.invalidateQueries({ queryKey: ["projects"] });
-      queryClinet.invalidateQueries({ queryKey: ["editProject", projectId] });
+      queryClient.invalidateQueries({ queryKey: ["projects"] });
+      queryClient.invalidateQueries({ queryKey: ["editProject", projectId] });
       toast.success(`Proyecto ${data.projectName} actualizado correctamente`);
       navigate("/");
     },
