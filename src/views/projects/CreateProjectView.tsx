@@ -3,9 +3,9 @@ import { Link, useNavigate } from "react-router-dom";
 import ProjectForm from "../../components/projects/ProjectForm";
 import { ProjectFormData } from "../../types";
 import { createProject } from "../../api/ProjectAPI";
+import { toast } from "react-toastify";
 
 export default function CreateProjectView() {
-
   const navigate = useNavigate();
 
   const initialValues: ProjectFormData = {
@@ -20,8 +20,9 @@ export default function CreateProjectView() {
     formState: { errors },
   } = useForm({ defaultValues: initialValues });
 
-  const handleForm = async (data: ProjectFormData) => {
-    await createProject(data);
+  const handleForm = async (formData: ProjectFormData) => {
+    await createProject(formData);
+    toast.success("Proyecto creado correctamente");
     navigate("/");
   };
 
