@@ -6,17 +6,26 @@ import {
   DialogPanel,
   DialogTitle,
 } from "@headlessui/react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import TaskForm from "./TaskForm";
 import { TaskFormData } from "../../types";
 import { useForm } from "react-hook-form";
+import { useMutation } from "@tanstack/react-query";
+import { createTask } from "../../api/TaskAPI";
+import { toast } from "react-toastify";
 
 export default function AddTaskModal() {
   const navigate = useNavigate();
+
+  //llemos si modal existe
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const modalTask = queryParams.get("newTask");
   const show = modalTask ? true : false;
+
+  //obtenemos params projectId
+  const params = useParams();
+  const projectId = params.projectId!;
 
   const initialValues: TaskFormData = {
     name: "",
@@ -26,11 +35,28 @@ export default function AddTaskModal() {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({ defaultValues: initialValues });
 
+  const { mutate } = useMutation({
+    mutationFn: createTask,
+    onError: (error) => {
+      toast.error(error.message);
+    },
+    onSuccess: () => {
+      navigate(location.pathname, { replace: true });
+      toast.success("Tarea creada exitosamente");
+      reset();
+    },
+  });
+
   const handleCreateTask = (formData: TaskFormData) => {
-    console.log(formData);
+    const data = {
+      formData,
+      projectId,
+    };
+    mutate(data);
   };
 
   return (
