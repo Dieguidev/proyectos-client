@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { getProjectById } from "../../api/ProjectAPI";
-import AddTaskModal from "../tasks/AddTaskModal";
+import AddTaskModal from "../../components/tasks/AddTaskModal";
 
 
 export default function ProjectDetailView() {
