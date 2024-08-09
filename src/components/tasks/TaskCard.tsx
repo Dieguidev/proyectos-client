@@ -17,6 +17,7 @@ export default function TaskCard({ task }: TaskCardProps) {
         >
           {task.name}
         </button>
+        <p className="text-slate-500">{task.description}</p>
       </div>
 
       <div className="flex shrink-0  gap-x-6">
