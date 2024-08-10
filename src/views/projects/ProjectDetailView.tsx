@@ -11,7 +11,7 @@ export default function ProjectDetailView() {
   const { projectId } = useParams();
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["editProject", projectId],
+    queryKey: ["project", projectId],
     queryFn: () => getProjectById(projectId!),
   });
 

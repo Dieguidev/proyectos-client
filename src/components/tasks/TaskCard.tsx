@@ -1,16 +1,39 @@
-import { Menu, MenuButton, MenuItem, MenuItems, Transition } from "@headlessui/react";
+import {
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuItems,
+  Transition,
+} from "@headlessui/react";
 import { EllipsisVerticalIcon } from "@heroicons/react/20/solid";
 import { Fragment } from "react/jsx-runtime";
 import { Task } from "../../types";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { deleteTask } from "../../api/TaskAPI";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "react-toastify";
 
 type TaskCardProps = {
   task: Task;
 };
 
 export default function TaskCard({ task }: TaskCardProps) {
-
   const navigate = useNavigate();
+  const params = useParams();
+  const projectId = params.projectId!;
+
+  const queryClient = useQueryClient();
+
+  const { mutate } = useMutation({
+    mutationFn: deleteTask,
+    onError: (error) => {
+      toast.error(error.message);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["project", projectId] });
+      toast.success("Tarea eliminada exitosamente");
+    },
+  });
 
   return (
     <li className="p-5 bg-white border border-slate-300 flex justify-between gap-3">
@@ -52,7 +75,9 @@ export default function TaskCard({ task }: TaskCardProps) {
                 <button
                   type="button"
                   className="block px-3 py-1 text-sm leading-6 text-gray-900"
-                  onClick={() => navigate(location.pathname + `?editTask=${task.id}`)}
+                  onClick={() =>
+                    navigate(location.pathname + `?editTask=${task.id}`)
+                  }
                 >
                   Editar Tarea
                 </button>
@@ -62,6 +87,13 @@ export default function TaskCard({ task }: TaskCardProps) {
                 <button
                   type="button"
                   className="block px-3 py-1 text-sm leading-6 text-red-500"
+                  onClick={() => {
+                    const data = {
+                      projectId,
+                      taskId: task.id,
+                    };
+                    mutate(data);
+                  }}
                 >
                   Eliminar Tarea
                 </button>
