@@ -8,6 +8,7 @@ type TaskAPI = {
   formData: TaskFormData;
   projectId: Project["id"];
   taskId: Task["id"];
+  status: Task["status"];
 }
 
 export async function createTask({ formData, projectId }: Pick<TaskAPI, 'formData' | 'projectId'>) {
@@ -59,6 +60,22 @@ export async function deleteTask({ projectId, taskId }: Pick<TaskAPI, 'projectId
   try {
     const url = `/task/${projectId}/task/${taskId}`;
     const { data } = await api.delete(url);
+
+    return data
+  } catch (error) {
+    if (isAxiosError(error) && error.response) {
+      console.error(error.response.data.error);
+      throw new Error(error.response.data.error);
+    }
+  }
+}
+
+// /api/task/66ac1accc4881493e2babfc3/task/66ac2e6b55d2b3c58799fb82/status
+
+export async function updateStatus({ projectId, taskId, status }: Pick<TaskAPI, 'projectId' | 'taskId' | 'status'>) {
+  try {
+    const url = `/task/${projectId}/task/${taskId}/status`;
+    const { data } = await api.post(url, { status });
 
     return data
   } catch (error) {
