@@ -46,7 +46,7 @@ export default function AddTaskModal() {
       toast.error(error.message);
     },
     onSuccess: () => {
-      queryClinet.invalidateQueries({queryKey: ["editProject", projectId]})
+      queryClinet.invalidateQueries({ queryKey: ["project", projectId] });
       navigate(location.pathname, { replace: true });
       toast.success("Tarea creada exitosamente");
       reset();
