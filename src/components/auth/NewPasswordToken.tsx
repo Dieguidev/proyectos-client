@@ -2,8 +2,10 @@ import { PinInput, PinInputField } from '@chakra-ui/pin-input';
 import { Link } from 'react-router-dom';
 
 export default function NewPasswordToken() {
-    const handleChange = (token: string) => {}
-    const handleComplete = (token: string) => {}
+    const handleChange = (token: string) => {console.log(token);
+    }
+    const handleComplete = (token: string) => {console.log(token);
+    }
 
     return (
         <>

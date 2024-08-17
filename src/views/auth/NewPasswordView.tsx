@@ -4,7 +4,10 @@ import NewPasswordForm from "../../components/auth/NewPasswordForm";
 
 export default function NewPasswordView() {
 
-  const [isValidToken, setIsValidToken] = useState(false);
+  const [isValidToken,
+    // setIsValidToken
+
+  ] = useState(false);
 
   return (
     <>

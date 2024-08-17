@@ -1,20 +1,23 @@
 import type { NewPasswordForm } from "../../types";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import ErrorMessage from "../ErrorMessage";
 
 
 
 export default function NewPasswordForm() {
-    const navigate = useNavigate()
+    // const navigate = useNavigate()
     const initialValues: NewPasswordForm = {
         password: '',
         passwordConfirmation: '',
     }
-    const { register, handleSubmit, watch, reset, formState: { errors } } = useForm({ defaultValues: initialValues });
+    const { register, handleSubmit, watch,
+      // reset,
+      formState: { errors } } = useForm({ defaultValues: initialValues });
 
 
-    const handleNewPassword = (formData: NewPasswordForm) => {}
+    const handleNewPassword = (formData: NewPasswordForm) => {console.log(formData);
+    }
 
     const password = watch('password');
 
