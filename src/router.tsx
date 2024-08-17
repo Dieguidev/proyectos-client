@@ -12,7 +12,8 @@ import RequestNewCodeView from "./views/auth/RequestNewCodeView";
 
 import ForgotPasswordView from "./views/auth/ForgotPasswordView";
 import NewPasswordView from "./views/auth/NewPasswordView";
-import RegisterView from "./views/auth/RegisterView";
+import RegisterView from "./views/auth/RegisterrView";
+
 
 
 export default function Router() {
