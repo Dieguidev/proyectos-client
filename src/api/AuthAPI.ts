@@ -1,6 +1,6 @@
 import { isAxiosError } from "axios";
 import { api } from "../lib/axios";
-import { ConfirmToken, RequestConfirmationCodeForm, UserLoginForm, UserRegistrationForm } from "../types";
+import { ConfirmToken, ForgotPasswordForm, RequestConfirmationCodeForm, UserLoginForm, UserRegistrationForm } from "../types";
 
 export async function createAccount(formData: UserRegistrationForm) {
   try {
@@ -38,6 +38,17 @@ export async function requestConfirmationCode(formData: RequestConfirmationCodeF
 export async function authenticateUser(formData: UserLoginForm) {
   try {
     const { data } = await api.post("/auth/login", formData);
+    return data.user
+  } catch (error) {
+    if (isAxiosError(error) && error.response) {
+      throw new Error(error.response.data.error);
+    }
+  }
+}
+
+export async function forgotPassword(formData: ForgotPasswordForm) {
+  try {
+    const { data } = await api.post("/auth/forgot-password", formData);
     return data.user
   } catch (error) {
     if (isAxiosError(error) && error.response) {
