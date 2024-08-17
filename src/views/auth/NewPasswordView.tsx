@@ -1,4 +1,6 @@
 import { useState } from "react";
+import NewPasswordToken from "../../components/auth/NewPasswordToken";
+import NewPasswordForm from "../../components/auth/NewPasswordForm";
 
 export default function NewPasswordView() {
 
@@ -11,6 +13,8 @@ export default function NewPasswordView() {
         Ingresa el código que recibiste {""}
         <span className=" text-fuchsia-500 font-bold">por email</span>
       </p>
+
+      {!isValidToken ? <NewPasswordToken/>:<NewPasswordForm/>}
     </>
   );
 }
