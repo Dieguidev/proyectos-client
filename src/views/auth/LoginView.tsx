@@ -1,18 +1,20 @@
 import { useForm } from "react-hook-form";
 import { UserLoginForm } from "../../types";
 import ErrorMessage from "../../components/ErrorMessage";
-
-
+import { Link } from "react-router-dom";
 
 export default function LoginView() {
-
   const initialValues: UserLoginForm = {
-    email: '',
-    password: '',
-  }
-  const { register, handleSubmit, formState: { errors } } = useForm({ defaultValues: initialValues })
+    email: "",
+    password: "",
+  };
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ defaultValues: initialValues });
 
-  const handleLogin = (formData: UserLoginForm) => { }
+  const handleLogin = (formData: UserLoginForm) => {};
 
   return (
     <>
@@ -22,9 +24,7 @@ export default function LoginView() {
         noValidate
       >
         <div className="flex flex-col gap-5">
-          <label
-            className="font-normal text-2xl"
-          >Email</label>
+          <label className="font-normal text-2xl">Email</label>
 
           <input
             id="email"
@@ -39,15 +39,11 @@ export default function LoginView() {
               },
             })}
           />
-          {errors.email && (
-            <ErrorMessage>{errors.email.message}</ErrorMessage>
-          )}
+          {errors.email && <ErrorMessage>{errors.email.message}</ErrorMessage>}
         </div>
 
         <div className="flex flex-col gap-5">
-          <label
-            className="font-normal text-2xl"
-          >Password</label>
+          <label className="font-normal text-2xl">Password</label>
 
           <input
             type="password"
@@ -64,10 +60,18 @@ export default function LoginView() {
 
         <input
           type="submit"
-          value='Iniciar Sesión'
+          value="Iniciar Sesión"
           className="bg-fuchsia-600 hover:bg-fuchsia-700 w-full p-3  text-white font-black  text-xl cursor-pointer"
         />
       </form>
+      <nav className="mt-10 flex flex-col space-y-4">
+        <Link
+          to={"/auth/register"}
+          className="text-center text-gray-300 font-normal"
+        >
+          ¿No tienes cuenta? Crear Una
+        </Link>
+      </nav>
     </>
-  )
+  );
 }
