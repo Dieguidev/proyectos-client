@@ -1,16 +1,17 @@
 import { PinInput, PinInputField } from "@chakra-ui/pin-input";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { ConfirmToken } from "../../types";
 
 export default function ConfirmAccountView() {
 
-  const [token, setToken] = useState('')
+  const [token, setToken] = useState<ConfirmToken['token']>('')
 
-  const handleChange = (token: string) => {
+  const handleChange = (token: ConfirmToken['token']) => {
     setToken(token)
   }
 
-  const handleComplete = (token: string) => {
+  const handleComplete = (token: ConfirmToken['token']) => {
     console.log('Token:', token)
   }
 
