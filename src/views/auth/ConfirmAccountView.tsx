@@ -1,7 +1,18 @@
+import { PinInput, PinInputField } from "@chakra-ui/pin-input";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 export default function ConfirmAccountView() {
 
+  const [token, setToken] = useState('')
+
+  const handleChange = (token: string) => {
+    setToken(token)
+  }
+
+  const handleComplete = (token: string) => {
+    console.log('Token:', token)
+  }
 
   return (
     <>
@@ -16,6 +27,16 @@ export default function ConfirmAccountView() {
         <label
           className="font-normal text-2xl text-center block"
         >Código de 6 dígitos</label>
+        <div className="flex justify-center gap-5">
+          <PinInput value={token} onChange={handleChange} onComplete={handleComplete}>
+            <PinInputField className="w-10 h-10 p-3 rounded-lg border-gray-300 border placeholder-white"/>
+            <PinInputField className="w-10 h-10 p-3 rounded-lg border-gray-300 border placeholder-white"/>
+            <PinInputField className="w-10 h-10 p-3 rounded-lg border-gray-300 border placeholder-white"/>
+            <PinInputField className="w-10 h-10 p-3 rounded-lg border-gray-300 border placeholder-white"/>
+            <PinInputField className="w-10 h-10 p-3 rounded-lg border-gray-300 border placeholder-white"/>
+            <PinInputField className="w-10 h-10 p-3 rounded-lg border-gray-300 border placeholder-white"/>
+          </PinInput>
+        </div>
 
       </form>
 
