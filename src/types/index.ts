@@ -46,3 +46,15 @@ export type Task = z.infer<typeof taskSchema>;
 export type TaskFormData = Pick<Task, 'name' | 'description'>;
 
 
+//* Auth & Users
+const authSchema = z.object({
+  name: z.string(),
+  email: z.string().email(),
+  password: z.string(),
+  passwordConfirmation: z.string(),
+});
+
+export type Auth = z.infer<typeof authSchema>;
+export type UserLoginForm = Pick<Auth, 'email' | 'password'>;
+
+
