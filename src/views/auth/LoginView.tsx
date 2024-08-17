@@ -17,7 +17,7 @@ export default function LoginView() {
     formState: { errors },
   } = useForm({ defaultValues: initialValues });
 
-  const {mutate} = useMutation({
+  const { mutate } = useMutation({
     mutationFn: authenticateUser,
     onError: (error: Error) => {
       toast.error(error.message);
@@ -25,7 +25,7 @@ export default function LoginView() {
     onSuccess: () => {
       toast.success("Bienvenido");
     },
-  })
+  });
 
   const handleLogin = (formData: UserLoginForm) => {
     mutate(formData);
@@ -33,9 +33,17 @@ export default function LoginView() {
 
   return (
     <>
+      <h1 className="text-5xl font-black text-white">Iniciar Sesión</h1>
+      <p className="text-2xl font-light text-white mt-5">
+        Comienza a planear tu proyectos {""}
+        <span className=" text-fuchsia-500 font-bold">
+          {" "}
+          iniciando sesión en este formulario
+        </span>
+      </p>
       <form
         onSubmit={handleSubmit(handleLogin)}
-        className="space-y-8 p-10 bg-white"
+        className="space-y-8 p-10 mt-10 bg-white"
         noValidate
       >
         <div className="flex flex-col gap-5">
