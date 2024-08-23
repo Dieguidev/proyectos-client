@@ -71,7 +71,8 @@ export async function validateTokenFromNewPassword(formData: ConfirmToken) {
 
 export async function updatePasswordWithToken({ formData, token }: { formData: NewPasswordForm, token: ConfirmToken["token"] }) {
   try {
-    const { data } = await api.post(`/auth/validate-token/${token}`, formData);
+    const { data } = await api.put(`/auth/update-password/${token}`, formData);
+    console.log(data);
 
     return data
   } catch (error) {
