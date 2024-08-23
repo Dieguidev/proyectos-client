@@ -1,5 +1,5 @@
 import type { ConfirmToken, NewPasswordForm } from "../../types";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import ErrorMessage from "../ErrorMessage";
 import { useMutation } from "@tanstack/react-query";
@@ -11,7 +11,7 @@ type NewPasswordFormProps = {
 };
 
 export default function NewPasswordForm({ token }: NewPasswordFormProps) {
-  // const navigate = useNavigate()
+  const navigate = useNavigate()
   const initialValues: NewPasswordForm = {
     password: "",
     passwordConfirmation: "",
@@ -32,6 +32,7 @@ export default function NewPasswordForm({ token }: NewPasswordFormProps) {
     onSuccess: (data) => {
       toast.success(data);
       reset();
+      navigate("/auth/login");
     },
   });
 
