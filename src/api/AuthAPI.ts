@@ -56,3 +56,16 @@ export async function forgotPassword(formData: ForgotPasswordForm) {
     }
   }
 }
+
+export async function validateTokenFromNewPassword(formData: ConfirmToken) {
+  try {
+    const { data } = await api.post("/auth/validate-token", formData);
+    console.log(data);
+
+    return data
+  } catch (error) {
+    if (isAxiosError(error) && error.response) {
+      throw new Error(error.response.data.error);
+    }
+  }
+}
