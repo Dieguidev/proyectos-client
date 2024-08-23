@@ -1,83 +1,103 @@
-import type { NewPasswordForm } from "../../types";
+import type { ConfirmToken, NewPasswordForm } from "../../types";
 // import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import ErrorMessage from "../ErrorMessage";
+import { useMutation } from "@tanstack/react-query";
+import { updatePasswordWithToken } from "../../api/AuthAPI";
+import { toast } from "react-toastify";
 
+type NewPasswordFormProps = {
+  token: ConfirmToken["token"];
+};
 
+export default function NewPasswordForm({ token }: NewPasswordFormProps) {
+  // const navigate = useNavigate()
+  const initialValues: NewPasswordForm = {
+    password: "",
+    passwordConfirmation: "",
+  };
+  const {
+    register,
+    handleSubmit,
+    watch,
+    reset,
+    formState: { errors },
+  } = useForm({ defaultValues: initialValues });
 
-export default function NewPasswordForm() {
-    // const navigate = useNavigate()
-    const initialValues: NewPasswordForm = {
-        password: '',
-        passwordConfirmation: '',
+  const { mutate } = useMutation({
+    mutationFn: updatePasswordWithToken,
+    onError: (error) => {
+      toast.error(error.message);
+    },
+    onSuccess: (data) => {
+      toast.success(data);
+      reset();
+    },
+  });
+
+  const handleNewPassword = (formData: NewPasswordForm) => {
+    const data = {
+      formData,
+      token,
     }
-    const { register, handleSubmit, watch,
-      // reset,
-      formState: { errors } } = useForm({ defaultValues: initialValues });
+    mutate(data);
+  };
 
+  const password = watch("password");
 
-    const handleNewPassword = (formData: NewPasswordForm) => {console.log(formData);
-    }
+  return (
+    <>
+      <form
+        onSubmit={handleSubmit(handleNewPassword)}
+        className="space-y-8 p-10  bg-white mt-10"
+        noValidate
+      >
+        <div className="flex flex-col gap-5">
+          <label className="font-normal text-2xl">Password</label>
 
-    const password = watch('password');
+          <input
+            type="password"
+            placeholder="Password de Registro"
+            className="w-full p-3  border-gray-300 border"
+            {...register("password", {
+              required: "El Password es obligatorio",
+              minLength: {
+                value: 8,
+                message: "El Password debe ser mínimo de 8 caracteres",
+              },
+            })}
+          />
+          {errors.password && (
+            <ErrorMessage>{errors.password.message}</ErrorMessage>
+          )}
+        </div>
 
-    return (
-        <>
-            <form
-                onSubmit={handleSubmit(handleNewPassword)}
-                className="space-y-8 p-10  bg-white mt-10"
-                noValidate
-            >
+        <div className="flex flex-col gap-5">
+          <label className="font-normal text-2xl">Repetir Password</label>
 
-                <div className="flex flex-col gap-5">
-                    <label
-                        className="font-normal text-2xl"
-                    >Password</label>
+          <input
+            id="password_confirmation"
+            type="password"
+            placeholder="Repite Password de Registro"
+            className="w-full p-3  border-gray-300 border"
+            {...register("passwordConfirmation", {
+              required: "Repetir Password es obligatorio",
+              validate: (value) =>
+                value === password || "Los Passwords no son iguales",
+            })}
+          />
 
-                    <input
-                        type="password"
-                        placeholder="Password de Registro"
-                        className="w-full p-3  border-gray-300 border"
-                        {...register("password", {
-                            required: "El Password es obligatorio",
-                            minLength: {
-                                value: 8,
-                                message: 'El Password debe ser mínimo de 8 caracteres'
-                            }
-                        })}
-                    />
-                    {errors.password && (
-                        <ErrorMessage>{errors.password.message}</ErrorMessage>
-                    )}
-                </div>
+          {errors.passwordConfirmation && (
+            <ErrorMessage>{errors.passwordConfirmation.message}</ErrorMessage>
+          )}
+        </div>
 
-                <div className="flex flex-col gap-5">
-                    <label
-                        className="font-normal text-2xl"
-                    >Repetir Password</label>
-
-                    <input
-                        id="password_confirmation"
-                        type="password"
-                        placeholder="Repite Password de Registro"
-                        className="w-full p-3  border-gray-300 border"
-                        {...register("passwordConfirmation", {
-                            required: "Repetir Password es obligatorio",
-                            validate: value => value === password || 'Los Passwords no son iguales'
-                        })}
-                    />
-
-                    {errors.passwordConfirmation && (
-                        <ErrorMessage>{errors.passwordConfirmation.message}</ErrorMessage>
-                    )}
-                </div>
-
-                <input
-                    type="submit"
-                    value='Establecer Password'
-                    className="bg-fuchsia-600 hover:bg-fuchsia-700 w-full p-3  text-white font-black  text-xl cursor-pointer"
-                />
-            </form>
-        </>
-    )
+        <input
+          type="submit"
+          value="Establecer Password"
+          className="bg-fuchsia-600 hover:bg-fuchsia-700 w-full p-3  text-white font-black  text-xl cursor-pointer"
+        />
+      </form>
+    </>
+  );
 }
