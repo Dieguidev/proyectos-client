@@ -6,7 +6,6 @@ import { dashboardProjectSchema, Project, ProjectFormData } from "../types";
 export async function createProject(formData: ProjectFormData) {
   try {
     const { data } = await api.post("/project", formData);
-    console.log(data);
 
     return data.project;
 
