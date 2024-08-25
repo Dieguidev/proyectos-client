@@ -64,3 +64,15 @@ export type ForgotPasswordForm = Pick<Auth, 'email'>;
 export type NewPasswordForm = Pick<Auth, 'password' | 'passwordConfirmation'>;
 
 
+//* Users
+export const userSchema = authSchema.pick({
+  name: true,
+  email: true,
+}).extend({
+  id: z.string(),
+});
+
+export type User = z.infer<typeof userSchema>;
+
+
+
