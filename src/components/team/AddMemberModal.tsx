@@ -1,6 +1,7 @@
 import { Fragment } from 'react';
 import { Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from '@headlessui/react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import AddMemberForm from './AddMemberForm';
 
 export default function AddMemberModal() {
 
@@ -48,6 +49,8 @@ export default function AddMemberModal() {
                                     <p className="text-xl font-bold">Busca el nuevo integrante por email {''}
                                         <span className="text-fuchsia-600">para agregarlo al proyecto</span>
                                     </p>
+
+                                    <AddMemberForm/>
 
 
                                 </DialogPanel>
