@@ -27,3 +27,15 @@ export async function addUserToProject({ projectId, id }: { projectId: Project['
     }
   }
 }
+
+export async function getProjectTeam(projectId: Project['id']) {
+  try {
+    const url = `/project/${projectId}/team`
+    const { data } = await api.get(url)
+    return data
+  } catch (error) {
+    if (isAxiosError(error) && error.response) {
+      throw new Error(error.response.data.error)
+    }
+  }
+}
