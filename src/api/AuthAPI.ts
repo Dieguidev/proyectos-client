@@ -82,3 +82,16 @@ export async function updatePasswordWithToken({ formData, token }: { formData: N
     }
   }
 }
+
+export async function getUser(){
+  try {
+    const { data } = await api.get("/auth/user");
+    console.log(data);
+
+    return data
+  } catch (error) {
+    if (isAxiosError(error) && error.response) {
+      throw new Error(error.response.data.error);
+    }
+  }
+}
