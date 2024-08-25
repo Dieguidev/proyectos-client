@@ -76,3 +76,14 @@ export type User = z.infer<typeof userSchema>;
 
 
 
+//* team
+const teamMemberSchema = userSchema.pick({
+  id: true,
+  name: true,
+  email: true,
+});
+
+export type TeamMember = z.infer<typeof teamMemberSchema>;
+export type TeamMemberForm = Pick<TeamMember, 'email'>;
+
+
