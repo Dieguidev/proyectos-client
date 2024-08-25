@@ -1,5 +1,5 @@
 import { isAxiosError } from "axios";
-import { Project, TeamMember, TeamMemberForm } from "../types";
+import { Project, TeamMember, TeamMemberForm, teamMembersSchema } from "../types";
 import { api } from "../lib/axios";
 
 export async function findUserByEmail({ projectId, formData }: { projectId: Project['id'], formData: TeamMemberForm }) {
@@ -32,7 +32,10 @@ export async function getProjectTeam(projectId: Project['id']) {
   try {
     const url = `/project/${projectId}/team`
     const { data } = await api.get(url)
-    return data
+    const response = teamMembersSchema.safeParse(data)
+    if (response.success) {
+      return response.data
+    }
   } catch (error) {
     if (isAxiosError(error) && error.response) {
       throw new Error(error.response.data.error)
