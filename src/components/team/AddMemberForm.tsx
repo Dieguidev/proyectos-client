@@ -23,18 +23,17 @@ export default function AddMemberForm() {
   //mutation es para obtener todo el resultado de la peticion
   const mutation = useMutation({
     mutationFn: findUserByEmail,
-    // onError: (error) => {
-    //   console.error(error)
-    // },
-    // onSuccess: (data) => {
-    //   console.log(data)
-    // }
   });
 
   const handleSearchUser = async (formData: TeamMemberForm) => {
     const data = { projectId, formData };
     mutation.mutate(data);
   };
+
+  const resetData = () => {
+    reset();
+    mutation.reset();
+  }
 
   return (
     <>
@@ -76,7 +75,7 @@ export default function AddMemberForm() {
         {mutation.error && (
           <p className="text-center">{mutation.error.message}</p>
         )}
-        {mutation.data && <SearchResult user={mutation.data}/>}
+        {mutation.data && <SearchResult user={mutation.data} reset={resetData}/>}
       </div>
     </>
   );
