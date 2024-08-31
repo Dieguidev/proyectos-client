@@ -69,6 +69,17 @@ export default function DashboardView() {
                 >
                   <div className="flex min-w-0 gap-x-4">
                     <div className="min-w-0 flex-auto space-y-2">
+                      <div className="mb-2">
+                        {project.manager === user.id ? (
+                          <p className="font-bold text-xs uppercase bg-indigo-50 text-indigo-500 border-2 border-indigo-500 rounded-lg inline-block py-1 px-5">
+                            Manager
+                          </p>
+                        ) : (
+                          <p className="font-bold text-xs uppercase bg-green-50 text-green-500 border-2 border-green-500 rounded-lg inline-block py-1 px-5">
+                            Colaborador
+                          </p>
+                        )}
+                      </div>
                       <Link
                         to={`/projects/${project.id}`}
                         className="text-gray-600 cursor-pointer hover:underline text-3xl font-bold"
@@ -81,17 +92,6 @@ export default function DashboardView() {
                       <p className="text-sm text-gray-400">
                         {project.description}
                       </p>
-                      {
-                        project.manager === user.id ? (
-                          <p className="text-sm text-gray-400">
-                            Tú eres el administrador
-                          </p>
-                        ) : (
-                          <p className="text-sm text-gray-400">
-                            Administrador: {project.manager}
-                          </p>
-                        )
-                      }
                     </div>
                   </div>
                   <div className="flex shrink-0 items-center gap-x-6">
