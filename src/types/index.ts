@@ -1,12 +1,55 @@
 
 import { z } from "zod";
 
+//* Auth & Users
+const authSchema = z.object({
+  name: z.string(),
+  email: z.string().email(),
+  password: z.string(),
+  passwordConfirmation: z.string(),
+  token: z.string(),
+});
+
+export type Auth = z.infer<typeof authSchema>;
+export type UserLoginForm = Pick<Auth, 'email' | 'password'>;
+export type UserRegistrationForm = Pick<Auth, 'email' | 'password' | 'name' | 'passwordConfirmation'>;
+export type ConfirmToken = Pick<Auth, 'token'>;
+export type RequestConfirmationCodeForm = Pick<Auth, 'email'>;
+export type ForgotPasswordForm = Pick<Auth, 'email'>;
+export type NewPasswordForm = Pick<Auth, 'password' | 'passwordConfirmation'>;
+
+
+
+//* Users
+export const userSchema = authSchema.pick({
+  name: true,
+  email: true,
+}).extend({
+  id: z.string(),
+});
+
+export type User = z.infer<typeof userSchema>;
+
+
+
+//* team
+const teamMemberSchema = userSchema.pick({
+  id: true,
+  name: true,
+  email: true,
+});
+export const teamMembersSchema = z.array(teamMemberSchema);
+export type TeamMember = z.infer<typeof teamMemberSchema>;
+export type TeamMemberForm = Pick<TeamMember, 'email'>;
+
+
 //* Projects
 export const projectSchema = z.object({
   id: z.string(),
   projectName: z.string(),
   clientName: z.string(),
   description: z.string(),
+  manager: z.string(userSchema.pick({ id: true }))
 });
 
 export const dashboardProjectSchema = z.object({
@@ -18,7 +61,8 @@ export const dashboardProjectSchema = z.object({
     id: true,
     projectName: true,
     clientName: true,
-    description: true
+    description: true,
+    manager: true,
   })),
   total: z.number(),
 })
@@ -44,47 +88,5 @@ export const taskSchema = z.object({
 
 export type Task = z.infer<typeof taskSchema>;
 export type TaskFormData = Pick<Task, 'name' | 'description'>;
-
-
-//* Auth & Users
-const authSchema = z.object({
-  name: z.string(),
-  email: z.string().email(),
-  password: z.string(),
-  passwordConfirmation: z.string(),
-  token: z.string(),
-});
-
-export type Auth = z.infer<typeof authSchema>;
-export type UserLoginForm = Pick<Auth, 'email' | 'password'>;
-export type UserRegistrationForm = Pick<Auth, 'email' | 'password' | 'name' | 'passwordConfirmation'>;
-export type ConfirmToken = Pick<Auth, 'token'>;
-export type RequestConfirmationCodeForm = Pick<Auth, 'email'>;
-export type ForgotPasswordForm = Pick<Auth, 'email'>;
-export type NewPasswordForm = Pick<Auth, 'password' | 'passwordConfirmation'>;
-
-
-//* Users
-export const userSchema = authSchema.pick({
-  name: true,
-  email: true,
-}).extend({
-  id: z.string(),
-});
-
-export type User = z.infer<typeof userSchema>;
-
-
-
-//* team
-const teamMemberSchema = userSchema.pick({
-  id: true,
-  name: true,
-  email: true,
-});
-export const teamMembersSchema= z.array(teamMemberSchema);
-export type TeamMember = z.infer<typeof teamMemberSchema>;
-export type TeamMemberForm = Pick<TeamMember, 'email'>;
-
 
 

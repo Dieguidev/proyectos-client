@@ -12,8 +12,11 @@ import { Link } from "react-router-dom";
 import { deleteProject, getProjects } from "../api/ProjectAPI";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import { useAuth } from "../hooks/useAuth";
 
 export default function DashboardView() {
+  const { data: user, isLoading: authLoading } = useAuth();
+
   const { data, isLoading } = useQuery({
     queryKey: ["projects"],
     queryFn: getProjects,
@@ -30,14 +33,13 @@ export default function DashboardView() {
       queryClient.invalidateQueries({ queryKey: ["projects"] });
       toast.success(data);
     },
-
   });
 
-  if (isLoading) {
+  if (isLoading && authLoading) {
     return "Cargando...";
   }
 
-  if (data)
+  if (data && user)
     return (
       <>
         <h1 className="text-5xl font-black">Mis proyectos</h1>
@@ -79,6 +81,17 @@ export default function DashboardView() {
                       <p className="text-sm text-gray-400">
                         {project.description}
                       </p>
+                      {
+                        project.manager === user.id ? (
+                          <p className="text-sm text-gray-400">
+                            Tú eres el administrador
+                          </p>
+                        ) : (
+                          <p className="text-sm text-gray-400">
+                            Administrador: {project.manager}
+                          </p>
+                        )
+                      }
                     </div>
                   </div>
                   <div className="flex shrink-0 items-center gap-x-6">
@@ -108,23 +121,28 @@ export default function DashboardView() {
                               Ver Proyecto
                             </Link>
                           </MenuItem>
-                          <MenuItem>
-                            <Link
-                              to={`/projects/${project.id}/edit`}
-                              className="block px-3 py-1 text-sm leading-6 text-gray-900"
-                            >
-                              Editar Proyecto
-                            </Link>
-                          </MenuItem>
-                          <MenuItem>
-                            <button
-                              type="button"
-                              className="block px-3 py-1 text-sm leading-6 text-red-500"
-                              onClick={() => mutate(project.id)}
-                            >
-                              Eliminar Proyecto
-                            </button>
-                          </MenuItem>
+
+                          {project.manager === user.id && (
+                            <>
+                              <MenuItem>
+                                <Link
+                                  to={`/projects/${project.id}/edit`}
+                                  className="block px-3 py-1 text-sm leading-6 text-gray-900"
+                                >
+                                  Editar Proyecto
+                                </Link>
+                              </MenuItem>
+                              <MenuItem>
+                                <button
+                                  type="button"
+                                  className="block px-3 py-1 text-sm leading-6 text-red-500"
+                                  onClick={() => mutate(project.id)}
+                                >
+                                  Eliminar Proyecto
+                                </button>
+                              </MenuItem>
+                            </>
+                          )}
                         </MenuItems>
                       </Transition>
                     </Menu>
