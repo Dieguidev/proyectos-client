@@ -7,6 +7,7 @@ import EditTaskData from "../../components/tasks/EditTaskData";
 import TaskModalDetails from "../../components/tasks/TaskModalDetails";
 import { useAuth } from "../../hooks/useAuth";
 import { isManager } from "../../utils/policies";
+import { useMemo } from "react";
 
 export default function ProjectDetailView() {
   const { data: user, isLoading: authLoading } = useAuth();
@@ -19,6 +20,13 @@ export default function ProjectDetailView() {
     queryKey: ["project", projectId],
     queryFn: () => getProjectById(projectId!),
   });
+
+
+  //comprueba si el usuario es el manager del proyecto y si puede editar
+  const canEdit = useMemo(() => data?.manager === user?.id, [data, user]);
+
+  console.log("canEdit", canEdit);
+
 
   if (isLoading && authLoading) {
     return "Cargando...";
@@ -54,7 +62,7 @@ export default function ProjectDetailView() {
           </nav>
         )}
 
-        <TaskList tasks={data.tasks} />
+        <TaskList tasks={data.tasks} canEdit={canEdit}/>
         <AddTaskModal />
         <EditTaskData />
         <TaskModalDetails />

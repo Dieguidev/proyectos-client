@@ -15,9 +15,10 @@ import { toast } from "react-toastify";
 
 type TaskCardProps = {
   task: Task;
+  canEdit: boolean;
 };
 
-export default function TaskCard({ task }: TaskCardProps) {
+export default function TaskCard({ task, canEdit }: TaskCardProps) {
   const navigate = useNavigate();
   const params = useParams();
   const projectId = params.projectId!;
@@ -39,6 +40,7 @@ export default function TaskCard({ task }: TaskCardProps) {
     <li className="p-5 bg-white border border-slate-300 flex justify-between gap-3">
       <div className="min-w-0 flex flex-col gap-y-4">
         <button
+          onClick={() => navigate(location.pathname + `?viewTask=${task.id}`)}
           type="button"
           className="text-xl font-bold text-slate-600 text-left"
         >
@@ -74,33 +76,36 @@ export default function TaskCard({ task }: TaskCardProps) {
                   Ver Tarea
                 </button>
               </MenuItem>
-              <MenuItem>
-                <button
-                  type="button"
-                  className="block px-3 py-1 text-sm leading-6 text-gray-900"
-                  onClick={() =>
-                    navigate(location.pathname + `?editTask=${task.id}`)
-                  }
-                >
-                  Editar Tarea
-                </button>
-              </MenuItem>
-
-              <MenuItem>
-                <button
-                  type="button"
-                  className="block px-3 py-1 text-sm leading-6 text-red-500"
-                  onClick={() => {
-                    const data = {
-                      projectId,
-                      taskId: task.id,
-                    };
-                    mutate(data);
-                  }}
-                >
-                  Eliminar Tarea
-                </button>
-              </MenuItem>
+              {canEdit && (
+                <>
+                  <MenuItem>
+                    <button
+                      type="button"
+                      className="block px-3 py-1 text-sm leading-6 text-gray-900"
+                      onClick={() =>
+                        navigate(location.pathname + `?editTask=${task.id}`)
+                      }
+                    >
+                      Editar Tarea
+                    </button>
+                  </MenuItem>
+                  <MenuItem>
+                    <button
+                      type="button"
+                      className="block px-3 py-1 text-sm leading-6 text-red-500"
+                      onClick={() => {
+                        const data = {
+                          projectId,
+                          taskId: task.id,
+                        };
+                        mutate(data);
+                      }}
+                    >
+                      Eliminar Tarea
+                    </button>
+                  </MenuItem>
+                </>
+              )}
             </MenuItems>
           </Transition>
         </Menu>
