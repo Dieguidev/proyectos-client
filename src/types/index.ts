@@ -1,5 +1,5 @@
 
-import { z } from "zod";
+import {  z } from "zod";
 
 //* Auth & Users
 const authSchema = z.object({
@@ -82,7 +82,11 @@ export const taskSchema = z.object({
   description: z.string(),
   projectId: z.string(),
   status: taskStatusSchema,
-  completedBy: userSchema.or(z.null()),
+  completedBy: z.array(z.object({
+    _id: z.string(),
+    user: userSchema,
+    status: taskStatusSchema,
+  })),
   createdAt: z.string(),
   updatedAt: z.string(),
 });
