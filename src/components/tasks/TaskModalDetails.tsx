@@ -67,7 +67,7 @@ export default function TaskModalDetails() {
   if (data)
     return (
       <>
-        <Transition appear show={show} as={Fragment}>
+        <Transition appear show={!!data && show} as={Fragment}>
           <Dialog
             as="div"
             className="relative z-10"

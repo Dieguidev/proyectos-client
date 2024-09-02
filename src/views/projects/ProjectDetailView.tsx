@@ -25,7 +25,6 @@ export default function ProjectDetailView() {
   //comprueba si el usuario es el manager del proyecto y si puede editar
   const canEdit = useMemo(() => data?.manager === user?.id, [data, user]);
 
-  console.log("canEdit", canEdit);
 
 
   if (isLoading && authLoading) {
