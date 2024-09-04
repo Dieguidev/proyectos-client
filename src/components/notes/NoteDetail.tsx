@@ -2,6 +2,10 @@ import { useMemo } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import { Note } from "../../types";
 import { formatDate } from "../../utils/utils";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { deleteNote } from "../../api/NoteAPI";
+import { toast } from "react-toastify";
+import { useLocation, useParams } from "react-router-dom";
 
 type NoteDetailProps = {
   note: Note;
@@ -10,6 +14,24 @@ type NoteDetailProps = {
 export default function NoteDetail({ note }: NoteDetailProps) {
   const { data, isLoading } = useAuth();
   const canDelete = useMemo(() => data?.id === note.createdBy.id, [data]);
+
+  const params = useParams();
+  const projectId = params.projectId!;
+
+  const location = useLocation();
+  const taskId = new URLSearchParams(location.search).get("viewTask")!;
+
+  const queryClient = useQueryClient();
+  const { mutate } = useMutation({
+    mutationFn: deleteNote,
+    onError: (error) => {
+      toast.error(error.message);
+    },
+    onSuccess: (data) => {
+      toast.success(data);
+      queryClient.invalidateQueries({ queryKey: ["task", taskId] });
+    },
+  });
 
   if (isLoading) return "Cargando...";
 
@@ -22,7 +44,15 @@ export default function NoteDetail({ note }: NoteDetailProps) {
         </p>
         <p className="text-xs text-slate-500">{formatDate(note.createdAt)}</p>
       </div>
-      {canDelete && <button  type="button" className="bg-red-400 hover:bg-red-500 p-2 text-xs text-white font-bold cursor-pointer transition-colors">Eliminar</button>}
+      {canDelete && (
+        <button
+          type="button"
+          className="bg-red-400 hover:bg-red-500 p-2 text-xs text-white font-bold cursor-pointer transition-colors"
+          onClick={()=>{mutate({projectId, taskId, noteId: note._id})}}
+        >
+          Eliminar
+        </button>
+      )}
     </div>
   );
 }
