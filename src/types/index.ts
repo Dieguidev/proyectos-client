@@ -1,11 +1,12 @@
 
-import {  z } from "zod";
+import { z } from "zod";
 
 //* Auth & Users
 const authSchema = z.object({
   name: z.string(),
   email: z.string().email(),
   password: z.string(),
+  currentPassword: z.string(),
   passwordConfirmation: z.string(),
   token: z.string(),
 });
@@ -17,6 +18,8 @@ export type ConfirmToken = Pick<Auth, 'token'>;
 export type RequestConfirmationCodeForm = Pick<Auth, 'email'>;
 export type ForgotPasswordForm = Pick<Auth, 'email'>;
 export type NewPasswordForm = Pick<Auth, 'password' | 'passwordConfirmation'>;
+export type UpdateCurrentUserPasswordFrom = Pick<Auth, 'currentPassword' | 'password' | 'passwordConfirmation'>;
+
 
 
 
