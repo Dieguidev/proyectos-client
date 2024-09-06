@@ -1,8 +1,12 @@
 import { DndContext, DragEndEvent } from "@dnd-kit/core";
 import { statusTranslation } from "../../locales/es";
-import { Task } from "../../types";
+import { Task, TaskStatus } from "../../types";
 import DropTask from "./DropTask";
 import TaskCard from "./TaskCard";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { updateStatus } from "../../api/TaskAPI";
+import { toast } from "react-toastify";
+import { useParams } from "react-router-dom";
 
 type TaskListProps = {
   tasks: Task[];
@@ -30,6 +34,21 @@ const statusStyle: { [key: string]: string } = {
 };
 
 export default function TaskList({ tasks, canEdit }: TaskListProps) {
+  const params = useParams();
+  const projectId = params.projectId!;
+
+  const queryClient = useQueryClient();
+  const { mutate } = useMutation({
+    mutationFn: updateStatus,
+    onError: (error) => {
+      toast.error(error.message);
+    },
+    onSuccess: () => {
+      toast.success("Estado actualizado");
+      queryClient.invalidateQueries({ queryKey: ["project", projectId] });
+    },
+  });
+
   const groupedTasks = tasks.reduce((acc, task) => {
     let currentGroup = acc[task.status] ? [...acc[task.status]] : [];
     currentGroup = [...currentGroup, task];
@@ -39,10 +58,13 @@ export default function TaskList({ tasks, canEdit }: TaskListProps) {
   const handleDragEnd = (e: DragEndEvent) => {
     const { active, over } = e;
 
-    if (over && over.id){
-      console.log('valido');
+    if (over && over.id) {
+      const taskId = active.id.toString();
+      const status = over.id as TaskStatus;
+
+      mutate({ projectId, taskId, status });
     }
-  }
+  };
 
   return (
     <>
@@ -58,7 +80,7 @@ export default function TaskList({ tasks, canEdit }: TaskListProps) {
                 {statusTranslation[status]}
               </h3>
 
-              <DropTask status={status}/>
+              <DropTask status={status} />
 
               <ul className="mt-5 space-y-5">
                 {tasks.length === 0 ? (
