@@ -3,9 +3,13 @@ import { Dialog, Transition } from "@headlessui/react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import ErrorMessage from "../ErrorMessage";
+import { CheckPasswordForm } from "../../types";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "react-toastify";
+import { checkPassword } from "../../api/AuthAPI";
 
 export default function DeleteProjectModal() {
-  const initialValues = {
+  const initialValues: CheckPasswordForm = {
     password: "",
   };
   const location = useLocation();
@@ -21,7 +25,19 @@ export default function DeleteProjectModal() {
     formState: { errors },
   } = useForm({ defaultValues: initialValues });
 
-  const handleForm = async (formData) => {};
+  const checkPasswordMutation = useMutation({
+    mutationFn: checkPassword,
+    onError: (error) => {
+      toast.error(error.message);
+    },
+
+  })
+
+  const handleForm = async (formData: CheckPasswordForm) => {
+    await checkPasswordMutation.mutateAsync(formData);
+    console.log('ccfsd');
+
+  };
 
   return (
     <Transition appear show={show} as={Fragment}>

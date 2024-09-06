@@ -19,7 +19,7 @@ export type RequestConfirmationCodeForm = Pick<Auth, 'email'>;
 export type ForgotPasswordForm = Pick<Auth, 'email'>;
 export type NewPasswordForm = Pick<Auth, 'password' | 'passwordConfirmation'>;
 export type UpdateCurrentUserPasswordFrom = Pick<Auth, 'currentPassword' | 'password' | 'passwordConfirmation'>;
-
+export type CheckPasswordForm = Pick<Auth, 'password'>;
 
 
 
