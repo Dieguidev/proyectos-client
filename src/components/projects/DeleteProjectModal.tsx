@@ -31,7 +31,7 @@ export default function DeleteProjectModal() {
     onError: (error) => {
       toast.error(error.message);
     },
-  })
+  });
 
   const queryClient = useQueryClient();
   const deleteProjectMutation = useMutation({
@@ -40,8 +40,9 @@ export default function DeleteProjectModal() {
       toast.error(error.message);
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ["projects"] });
       toast.success(data);
+      queryClient.invalidateQueries({ queryKey: ["projects"] });
+      navigate(location.pathname, { replace: true });
     },
   });
 
