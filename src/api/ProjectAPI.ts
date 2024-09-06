@@ -1,6 +1,6 @@
 import { isAxiosError } from "axios";
 import { api } from "../lib/axios";
-import { dashboardProjectSchema, editProjectSchema, Project, ProjectFormData } from "../types";
+import { dashboardProjectSchema, editProjectSchema, Project, ProjectFormData, projectSchema } from "../types";
 
 
 export async function createProject(formData: ProjectFormData) {
@@ -36,6 +36,23 @@ export async function getProjectById(id: Project["id"]) {
   try {
     const { data } = await api.get(`/project/${id}`);
     const response = editProjectSchema.safeParse(data.project);
+    if (response.success) {
+      return response.data;
+    }
+  } catch (error) {
+    if (isAxiosError(error) && error.response) {
+      console.error(error.response.data.error);
+      throw new Error(error.response.data.error);
+    }
+  }
+}
+
+export async function getFullProject(id: Project["id"]) {
+  try {
+    const { data } = await api.get(`/project/${id}`);
+
+    const response = projectSchema.safeParse(data.project);
+
     if (response.success) {
       return response.data;
     }

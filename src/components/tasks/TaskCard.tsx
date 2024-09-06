@@ -7,7 +7,7 @@ import {
 } from "@headlessui/react";
 import { EllipsisVerticalIcon } from "@heroicons/react/20/solid";
 import { Fragment } from "react/jsx-runtime";
-import { Task } from "../../types";
+import {  TaskProject } from "../../types";
 import { useNavigate, useParams } from "react-router-dom";
 import { deleteTask } from "../../api/TaskAPI";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -15,7 +15,7 @@ import { toast } from "react-toastify";
 import { useDraggable } from "@dnd-kit/core";
 
 type TaskCardProps = {
-  task: Task;
+  task: TaskProject;
   canEdit: boolean;
 };
 

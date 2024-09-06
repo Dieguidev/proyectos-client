@@ -1,4 +1,5 @@
 
+
 import { z } from "zod";
 
 //* Auth & Users
@@ -47,38 +48,7 @@ export type TeamMember = z.infer<typeof teamMemberSchema>;
 export type TeamMemberForm = Pick<TeamMember, 'email'>;
 
 
-//* Projects
-export const projectSchema = z.object({
-  id: z.string(),
-  projectName: z.string(),
-  clientName: z.string(),
-  description: z.string(),
-  manager: z.string(userSchema.pick({ id: true }))
-});
 
-export const dashboardProjectSchema = z.object({
-  limit: z.number(),
-  next: z.string().nullable(),
-  page: z.number(),
-  prev: z.string().nullable(),
-  projects: z.array(projectSchema.pick({
-    id: true,
-    projectName: true,
-    clientName: true,
-    description: true,
-    manager: true,
-  })),
-  total: z.number(),
-})
-
-export const editProjectSchema = projectSchema.pick({
-  projectName: true,
-  clientName: true,
-  description: true,
-})
-export type Project = z.infer<typeof projectSchema>;
-
-export type ProjectFormData = Pick<Project, 'clientName' | 'projectName' | 'description'>
 
 
 //*Notes
@@ -114,7 +84,50 @@ export const taskSchema = z.object({
   updatedAt: z.string(),
 });
 
+export const taskProjectSchema = taskSchema.pick({
+  id: true,
+  name: true,
+  description: true,
+  status: true,
+});
 export type Task = z.infer<typeof taskSchema>;
 export type TaskFormData = Pick<Task, 'name' | 'description'>;
+export type TaskProject = z.infer<typeof taskProjectSchema>;
+
+
+//* Projects
+export const projectSchema = z.object({
+  id: z.string(),
+  projectName: z.string(),
+  clientName: z.string(),
+  description: z.string(),
+  manager: z.string(userSchema.pick({ id: true })),
+  tasks: z.array(taskProjectSchema),
+  team: z.array(z.string(userSchema.pick({ id: true }))),
+});
+
+export const dashboardProjectSchema = z.object({
+  limit: z.number(),
+  next: z.string().nullable(),
+  page: z.number(),
+  prev: z.string().nullable(),
+  projects: z.array(projectSchema.pick({
+    id: true,
+    projectName: true,
+    clientName: true,
+    description: true,
+    manager: true,
+  })),
+  total: z.number(),
+})
+
+export const editProjectSchema = projectSchema.pick({
+  projectName: true,
+  clientName: true,
+  description: true,
+})
+export type Project = z.infer<typeof projectSchema>;
+
+export type ProjectFormData = Pick<Project, 'clientName' | 'projectName' | 'description'>
 
 
