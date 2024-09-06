@@ -1,5 +1,6 @@
 import { statusTranslation } from "../../locales/es";
 import { Task } from "../../types";
+import DropTask from "./DropTask";
 import TaskCard from "./TaskCard";
 
 type TaskListProps = {
@@ -49,6 +50,9 @@ export default function TaskList({ tasks, canEdit }: TaskListProps) {
             >
               {statusTranslation[status]}
             </h3>
+
+            <DropTask/>
+
             <ul className="mt-5 space-y-5">
               {tasks.length === 0 ? (
                 <li className="text-gray-500 text-center pt-3">
