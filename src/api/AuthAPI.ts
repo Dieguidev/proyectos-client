@@ -5,6 +5,8 @@ import { CheckPasswordForm, ConfirmToken, ForgotPasswordForm, NewPasswordForm, R
 export async function createAccount(formData: UserRegistrationForm) {
   try {
     const { data } = await api.post("/auth/register", formData);
+    console.log(data);
+
     return data.user
   } catch (error) {
     if (isAxiosError(error) && error.response) {
